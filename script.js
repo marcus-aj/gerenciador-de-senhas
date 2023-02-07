@@ -1,30 +1,32 @@
-const button = document.getElementById("button");
-const slider = document.getElementById("slider");
-const passwordContainer = document.getElementById("container-password");
-const passwordText = passwordContainer.querySelector("span:nth-of-type(2)");
+let sliderElement = document.querySelector("#slider");
+let password      = document.querySelector("#password");
 
-button.addEventListener("click", function() {
-    let password = "";
-    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+";
-    let passwordLength = slider.value;
+let containerPassword = document.querySelector("#container-password");
+let sizePassword      = document.querySelector("#valor");
 
-    for (let i = 0; i < passwordLength; i++) {
-        password += characters.charAt(Math.floor(Math.random() * characters.length));
+//fonte da senha randomica
+let charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#';
+let novaSenha = '';
+
+sizePassword.innerHTML = sliderElement.value;
+
+slider.oninput = function() {
+    sizePassword.innerHTML = this.value;
+}
+
+function generatePassword() {
+    let pass = '';
+    for(let i = 0, n = charset.length; i < sliderElement.value; i++) {
+        pass += charset.charAt(Math.floor(Math.random() * n));
     }
-    passwordText.innerHTML = password;
-});
 
-passwordText.addEventListener("click", function() {
-    var range = document.createRange();
-    range.selectNode(passwordText);
-    window.getSelection().addRange(range);
-    try {
-        var successful = document.execCommand('copy');
-        var msg = successful ? 'successful' : 'unsuccessful';
-        console.log('Copy command was ' + msg);
-    } catch (err) {
-        console.log('Oops, unable to copy');
-    }
-    window.getSelection().removeAllRanges();
-    alert("senha copiada com sucesso!");
-});
+    containerPassword.classList.remove("hide");
+    password.innerHTML = pass;
+    console.log(pass);
+    novaSenha = pass;
+}
+
+function copyPassword() {
+    alert("Senha copiada com sucesso!");
+    navigator.clipboard.writeText(novaSenha);
+}
